@@ -38,37 +38,37 @@ public class DuplicateFinderImpl implements DuplicateFinder {
     @Override
     public boolean process(File sourceFile, File targetFile) {
 
-        if (load(sourceFile) == false) {   //Загружаем исходный файл
+        if (load(sourceFile) == false) {   //Loading original file
             return false;
         };
-        finalStr = sort(strings);     //сортируем строки
-        if (save(targetFile) == false) {// сохраняем отсортированные строки в конечный файл
-            return false;
+        finalStr = sort(strings);     //sorting  strings
+        if (save(targetFile) == false) {// saving sorted strings to the final file
+		return false;
         };
-        return true;//Если не было ошибок возвращаем true ,иначе false
+        return true;//if is'nt errors- return true ,else false
     }
 
-    // Этот метод открывает файл и считывет из него данные преобразуя их в массив строк
+    // This method opens file and  load data from it and transforms data to String array
     
     private boolean load(File filename) {    
         int i, j;
         j = 0;
         File f1 = filename;
-        j = (int) f1.length(); // определяем размер файла
-        char[] mass = new char[j];// создаем массив такого размера
+        j = (int) f1.length(); // measure file length
+        char[] mass = new char[j];// create an array of that length 
         j = 0;
 
         try {
-            source = new FileInputStream(f1);  //открываем входящий поток
+            source = new FileInputStream(f1);  //open inputstream
         } catch (FileNotFoundException e) {  
             return false;
         }
         try {
             do {
-                i = source.read();// читаем по байту файл
-                if (i != -1) { // пока не конец
-                    mass[j] = (char) i;// и сохраняем в массив символов
-
+                i = source.read();// read file by byte
+                if (i != -1) { // while  isn't end 
+                    mass[j] = (char) i;// and save to the char array
+					
                 }
                 j += 1;
             } while (i != -1);
@@ -76,17 +76,17 @@ public class DuplicateFinderImpl implements DuplicateFinder {
             return false;
         }
         try {
-            source.close();//закрываем входящий поток
+            source.close();//close inputstream
         } catch (IOException e) {
             return false;
         }
 
-        str = new String(mass);//преобразуем считанный из файла массив символов в строку
-        strings = str.trim().split("\n");//разбиваем строку на подстроки - в качестве разделителя перевод строки 
+        str = new String(mass);//transform read array to String
+        strings = str.trim().split("\n");//split String by the "\n" on substrings 
         return true;
     }
 
-    // Этот метод сортирует строки
+    // This method sorts the substrings
     
     private String[][] sort(String[] str) {
         int i, j;
@@ -94,32 +94,32 @@ public class DuplicateFinderImpl implements DuplicateFinder {
         String stroka = "";
 
         summ2 = str.length;
-        String[][] str1 = new String[2][str.length];//создаем двумерный массив: первый элемент отвечает  
-        for (i = 0; i < str.length; i++) {          // за кол-во повторений строки в файле, второй - собственно
-            str1[0][i] = "1";                       //сама строка
-            str1[1][i] = str[i];                  //Cчитываем входящий массив в наш двумерный;  
-        }                                        //число повторений пока везде ставим 1
-        for (i = 0; i < str.length; i++) {    //Ищем число повторений каждой строки и суммируем их
+        String[][] str1 = new String[2][str.length];//create String array by two dimensions:first - counter of repetitions of substring   
+        for (i = 0; i < str.length; i++) {          // in the file, second  - substring themselves
+            str1[0][i] = "1";                       
+            str1[1][i] = str[i];                  //reading input array to our new two-dimensions array;  
+        }                                        //counter of repetitions everywere make 1
+        for (i = 0; i < str.length; i++) {    //finding number of repetitions for every substrings
             summ = 1;
             if (!(str1[0][i].trim().equals("-1"))) {
                 for (j = i + 1; j < str.length; j++) {
                     if (!(str1[0][j].trim().equals("-1"))) {
-                        if (str1[1][j].trim().equals(str1[1][i].trim())) {//сравниваем строки;если они одинаковы ,
-                            summ++;                // то у второй ставим чисдо повторений -1 - чтобы больше не анализировать,
-                            summ2--;               //а у исходной увеличиваем число повторений summ на 1; при этом summ2 - 
-                            str1[0][j] = "-1";    //это общее число неповторяющихся строк уменьшается на одну
+                        if (str1[1][j].trim().equals(str1[1][i].trim())) {//compare the substrings; ,
+                            summ++;                // and for the copies set counter to -1 ,
+                            summ2--;               //and the origin substring counter - summ increase on 1; and summ2 - 
+                            str1[0][j] = "-1";    //it's common number of non-reapeted substrings decrease on 1
                         }
                     }
                 }
-                stroka = stroka.valueOf(summ);//преобразуем окончательное число повторений строки в строку и сохраняем в массиве
-                str1[0][i] = stroka;
+                stroka = stroka.valueOf(summ);//transform the final number of repetitions of substring  
+                str1[0][i] = stroka;         //in to String and save it to array  
             }
         }
-        String[][] strings1 = new String[2][summ2];//создаем новый массив , в которм число элементов равно числу 
-               j=0;                                // неповторяющихся строк
-        
+        String[][] strings1 = new String[2][summ2];//create new array , in which  number of elements the same as numuber of  
+               j=0;                                // non-reapeted substrings - summ2
+			   
 
-        for (i = 0; i < str.length; i++) {        //заполняем его
+        for (i = 0; i < str.length; i++) {        //fill it 
             if (!(str1[0][i].equals("-1"))) {
                 strings1[0][j] = str1[0][i];
                 strings1[1][j] = str1[1][i];
@@ -127,8 +127,8 @@ public class DuplicateFinderImpl implements DuplicateFinder {
             }
         }
         stroka = "";                    
-        for (j = 0; j < summ2 - 1; j++) {    //сортируем строки улучшенным методом пузырька
-            for (i = 0; i < summ2 - j - 1; i++) {
+        for (j = 0; j < summ2 - 1; j++) {    //sort the strings by  modified method of buble
+		for (i = 0; i < summ2 - j - 1; i++) {
                 if (strings1[1][i].compareTo(strings1[1][i + 1]) > 0) {
                     str1[0][0] = strings1[0][i];
                     str1[1][0] = strings1[1][i];
@@ -142,8 +142,8 @@ public class DuplicateFinderImpl implements DuplicateFinder {
         return strings1;
     }
 
-   // Этот метод открывает конечный файл. Если его нет, то он его создает, если есть - открывает 
-   // и дописывает исходные данные в конец 
+   // This method opens final file. If it doesn't exist,it will be creates, if it exist - it will be opened 
+   // and data will be added to the end  
     
     private boolean save(File filename) {
         int i;
@@ -151,19 +151,19 @@ public class DuplicateFinderImpl implements DuplicateFinder {
         File f1 = filename;
 
         try {
-            dest = new FileOutputStream(f1, true);// открываем выходной поток с дозаписью данных 
+            dest = new FileOutputStream(f1, true);  
         } catch (FileNotFoundException e) {
             return false;
         }
 
-        for (i = 0; i < finalStr[1].length; i++) {//создаем выходные строки путем соединенеия двух 
-            // элементов массива - собственно строки и ее повторений в скобочках; все строки соединяем в одну большую строку
-            // str - для удобства вывода в файл
+        for (i = 0; i < finalStr[1].length; i++) {//creating output strings by concatenate of two elements of  
+            // array - substring and its counter of repetitions; all substrings concatenate in one big string 
+            // str - for easier way to save in the file
             str = str.concat(finalStr[1][i].trim() + "[" + finalStr[0][i].trim() + "]" + "\r\n");
         }
-        strOut = str.getBytes();//преобразуем выходную строку в массив байтов
+        strOut = str.getBytes();//transform output big string in the byte array
         try {
-            dest.write(strOut);//записываем его в файл
+            dest.write(strOut);//write array to file
         } catch (IOException ex) {
             return false;
         }
@@ -172,7 +172,7 @@ public class DuplicateFinderImpl implements DuplicateFinder {
         } catch (IOException e) {
             return false;
         }
-        return true;// если не было ошибок - возвращаем true
+        return true;// if there is no errors - return true
     }
 
 }
