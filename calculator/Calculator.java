@@ -7,7 +7,7 @@ package com.tsystems.javaschool.tasks;
 
 /**
  *
- * @author тошиба
+ * @author Sergei Tulupov
  */
 public interface Calculator {
     /**
